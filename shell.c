@@ -8,9 +8,16 @@
 #include<readline/readline.h> 
 #include<readline/history.h> 
 
-
 void clear() {
     printf("\033[H\033[J");
+}
+
+void current_path() {
+    char cwd[1024];
+    
+    if (getcwd(cwd, sizeof(cwd)) != NULL) {
+       printf("%s\n", cwd);
+    }
 }
 
 void shell_init() {
@@ -22,11 +29,11 @@ void shell_init() {
     printf("User is @");
     char* username = getenv("USER");
     printf("%s\n\n",username);
-    sleep(10);
+    sleep(2);
+    current_path();
 }
-
-
 
 int main() {
     shell_init();
+    
 }
