@@ -14,9 +14,10 @@ void clear() {
 
 void current_path() {
     char cwd[1024];
-    
+    char* username = getenv("USER");
+    printf("%s:",username);
     if (getcwd(cwd, sizeof(cwd)) != NULL) {
-       printf("%s\n", cwd);
+       printf("%s$\n", cwd);
     }
 }
 
@@ -26,10 +27,8 @@ void shell_init() {
     printf("Shell made by Chandan Gupta\n\n");
     printf("Roll Number - 2018386\n");
     printf("\n\n\n\n");
-    printf("User is @");
-    char* username = getenv("USER");
-    printf("%s\n\n",username);
     sleep(2);
+    clear();
     current_path();
 }
 
