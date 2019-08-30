@@ -47,6 +47,86 @@ char **parser(char *command) {
 	return tokens;
 }
 
-void main() {
+int comparison(char *command, char*str) {
+	for(int i=0;i<strlen(str);i++) {
+		if(command[i] != str[i]) {
+			return 0;
+		}
+	}
+	return 1;
+}
+
+void currentDirectory() {
+	char s[100];
+	printf("%s\n",getcwd(s,100));
+}
+
+int changeDirectory(char *path) {
+
+	char *str = malloc(sizeof(char)*(strlen(path)-1));
+	for(int i=0;i<strlen(path)-1;i++) {
+		str[i] = path[i];
+	}
+
+	if(path == NULL || strlen(path) == 0) {
+		printf("Path Argument missing\n");
+		return -2;
+	}
+	//printf("%ld",strlen(path));
+	//printf("%ld",strlen("chanda"));
+	//printf("%s",path);
+	currentDirectory(); 
+	int status = chdir(str);
+	currentDirectory();
+
+	return status;
+}
+
+void builtin_commands(char **tokens) {
+	char *command = *tokens;
+	if(comparison(command,"cd") == 1) {
+		int status = changeDirectory(*(++tokens));
+		if(status == -1) {
+			printf("error : Cannot find the directory.\n");
+		}
+		return;
+	}
+	else if(comparison(command,"echo") == 1) {
+		++tokens;
+		while(*tokens != NULL) {
+			printf("%s ",*tokens);
+			tokens++;
+		}
+	}
+	else if(comparison(command,"history") == 1) {
+		print_history();
+	}
+
+	else if(comparison(command,"pwd") == 1) {
+		currentDirectory();
+	}
+
+	else if(comparison(command,"exit") == 1) {
+		exit(0);
+	}
+
+	else {
+		printf("Please enter a valid command...");
+	}
 	
+}
+
+void init_shell() {
+	while(1) {
+		printf(">");
+		char *command = getCommand();
+		add_history(command);
+		char **tokens = parser(command);
+		builtin_commands(tokens);
+		//print_history();
+	}
+}
+
+void main() {
+	init_shell();
 }
