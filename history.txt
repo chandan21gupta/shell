@@ -1,0 +1,8 @@
+pwd
+ls
+history
+history
+ls
+pwd
+ls
+history

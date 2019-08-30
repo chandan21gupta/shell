@@ -18,8 +18,25 @@ void add_history(char *command) {
 
 void print_history() {
     for(int i = 0;i<command_number;i++) {
-        printf("%s\n",history[i]);
+        printf("%d %s\n",i+1,history[i]);
     }
+}
+
+void clear_history() {
+	for(int i = 0;i<command_number;i++) {
+		free(history[i]);
+	}
+	command_number = 0;
+}
+
+void addHistoryFile() {
+	FILE *fptr;
+	fptr = fopen("history.txt","w");
+	for(int i=0;i<command_number;i++) {
+		fputs(history[i],fptr);
+		fputs("\n",fptr);
+	}
+	fclose(fptr);
 }
 
 char *getCommand() {
@@ -47,15 +64,6 @@ char **parser(char *command) {
 	tokens[i] = NULL;
 	return tokens;
 }
-
-// int comparison(char *command, char*str) {
-// 	for(int i=0;i<strlen(str);i++) {
-// 		if(command[i] != str[i]) {
-// 			return 0;
-// 		}
-// 	}
-// 	return 1;
-// }
 
 void currentDirectory() {
 	char s[100];
@@ -109,7 +117,22 @@ void builtin_commands(char **tokens) {
 		printf("\n");
 	}
 	else if(strcmp(command,"history") == 0) {
-		print_history();
+		tokens++;
+		if(*tokens == NULL) {
+			print_history();
+		}
+		else if(*tokens != NULL){
+			if(strcmp(*tokens,"-c") == 0) {
+				clear_history();
+			}
+			else if(strcmp(*tokens,"-w") == 0) {
+				addHistoryFile();
+			}
+			else {
+				printf("invalid command");
+			}
+		}
+
 	}
 
 	else if(strcmp(command,"pwd") == 0) {
@@ -125,7 +148,7 @@ void builtin_commands(char **tokens) {
 	}
 
 	else {
-		printf("Current command is not supported currently...\n");
+		printf("Command not found\n");
 	}	
 }
 
