@@ -2,6 +2,7 @@
 #include<stdlib.h>
 #include<string.h>
 #include<unistd.h>  
+#include <sys/wait.h>
 
 //Only 100 commands in total are possible
 char *history[100];
@@ -17,7 +18,7 @@ void add_history(char *command) {
 
 void print_history() {
     for(int i = 0;i<command_number;i++) {
-        printf("%s",history[i]);
+        printf("%s\n",history[i]);
     }
 }
 
@@ -47,14 +48,14 @@ char **parser(char *command) {
 	return tokens;
 }
 
-int comparison(char *command, char*str) {
-	for(int i=0;i<strlen(str);i++) {
-		if(command[i] != str[i]) {
-			return 0;
-		}
-	}
-	return 1;
-}
+// int comparison(char *command, char*str) {
+// 	for(int i=0;i<strlen(str);i++) {
+// 		if(command[i] != str[i]) {
+// 			return 0;
+// 		}
+// 	}
+// 	return 1;
+// }
 
 void currentDirectory() {
 	char s[100];
@@ -63,63 +64,79 @@ void currentDirectory() {
 
 int changeDirectory(char *path) {
 
-	char *str = malloc(sizeof(char)*(strlen(path)-1));
-	for(int i=0;i<strlen(path)-1;i++) {
-		str[i] = path[i];
-	}
-
 	if(path == NULL || strlen(path) == 0) {
 		printf("Path Argument missing\n");
 		return -2;
 	}
-	//printf("%ld",strlen(path));
-	//printf("%ld",strlen("chanda"));
-	//printf("%s",path);
-	currentDirectory(); 
-	int status = chdir(str);
-	currentDirectory();
+	int status = chdir(path);
 
 	return status;
 }
 
+int execute_process(char **tokens) {
+	pid_t pid, wpid;
+	int status;
+	pid = fork();
+	if(pid == 0) {
+		if(execvp(*tokens,tokens) == -1) {
+			perror("shell");
+		}
+		exit(0);
+	}	else if(pid < 0) {
+		perror("shell");
+	}
+	do {
+		wpid = waitpid(pid, &status, WUNTRACED);
+	} while (!WIFEXITED(status) && !WIFSIGNALED(status));
+	return 1;
+}
+
 void builtin_commands(char **tokens) {
 	char *command = *tokens;
-	if(comparison(command,"cd") == 1) {
+	if(strcmp(command,"cd") == 0) {
 		int status = changeDirectory(*(++tokens));
 		if(status == -1) {
 			printf("error : Cannot find the directory.\n");
 		}
 		return;
 	}
-	else if(comparison(command,"echo") == 1) {
+	else if(strcmp(command,"echo") == 0) {
 		++tokens;
 		while(*tokens != NULL) {
 			printf("%s ",*tokens);
 			tokens++;
 		}
+		printf("\n");
 	}
-	else if(comparison(command,"history") == 1) {
+	else if(strcmp(command,"history") == 0) {
 		print_history();
 	}
 
-	else if(comparison(command,"pwd") == 1) {
+	else if(strcmp(command,"pwd") == 0) {
 		currentDirectory();
 	}
 
-	else if(comparison(command,"exit") == 1) {
+	else if(strcmp(command,"exit") == 0) {
 		exit(0);
 	}
 
-	else {
-		printf("Please enter a valid command...");
+	else if(strcmp(command,"ls") == 0 || strcmp(command,"cat") == 1 || strcmp(command,"date") == 1 || strcmp(command,"rm") || strcmp(command,"mkdir")){
+		execute_process(tokens);
 	}
-	
+
+	else {
+		printf("Current command is not supported currently...\n");
+	}	
 }
 
 void init_shell() {
 	while(1) {
 		printf(">");
 		char *command = getCommand();
+		int len = strlen(command);
+		if(len > 0 && command[len-1] == '\n') {
+			command[len-1] = '\0';
+		}
 		add_history(command);
 		char **tokens = parser(command);
 		builtin_commands(tokens);
