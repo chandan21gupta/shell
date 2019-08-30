@@ -7,6 +7,7 @@ int command_number = 0;
 
 void add_history(char *command) {
     history[command_number] = malloc(strlen(command)*sizeof(char));
+    history[command_number] = command;
     command_number++;
 }
 
@@ -24,5 +25,9 @@ char *getCommand() {
 }
 
 void main() {
-    
+    for(int i=0;i<5;i++) {
+		char *command = getCommand();
+		add_history(command);    	
+    }
+    print_history();
 }
