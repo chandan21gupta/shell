@@ -11,6 +11,7 @@ This is a custom shell I made in c for a linux based environment. Currently it h
     <br/>
                 ->(Unreachable or wrong path provided)<br/>
     Shell prints "wrong path provided".<br/>
+
 ### echo [flags] [statement]
 Assumption -> Any other flag is just another statement<br/>
 prints the statement input given by the user.<br/>
@@ -21,7 +22,8 @@ flags -> -e, -n<br/>
 -n - does not go to the next line after printing the given statement.<br/>
 Extreme cases -> (No statement provided)<br/>
   simply returns to the shell.</br>
-  (Any other flag provided)<br/>
+-en or ne - removes spaces and prevents newline.
+(Any other flag provided)<br/>
   Simply prints it due to the assumption.<br/>
 
 ### history [flags]
@@ -34,8 +36,9 @@ flags -> -c,-w<br/>
 -w - stores the history till that point in a text file named "history.txt".<br/>
 Extreme cases -> (any other flag)<br/>
 prints "Invalid Command"<br/>
-(More than one commands)<br/>
-prints "Invalid Command"<br/>
+-cw or -wc - stores the history till now in a file and then clears it from the buffer.<br/>
+(More than one arguments)<br/>
+Raises warning not to give more than one arguments<br/>
 
 
 ### pwd 
