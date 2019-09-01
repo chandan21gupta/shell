@@ -23,5 +23,16 @@ Extreme cases -> (No statement provided)<br/>
   simply returns to the shell.</br>
   (Any other flag provided)<br/>
   Simply prints it due to the assumption.<br/>
-  
-  
+
+### history [flags]
+Assumption -> Only storing top last 100 commands due to memory issues.<br/>
+prints the list of used commands chronologically.<br/>
+Ex. history<br/>
+Output - list of used commands with number.<br/>
+flags -> -c,-w<br/>
+-c - clears the history<br/>
+-w - stores the history till that point in a text file named "history.txt".<br/>
+Extreme cases -> (any other flag)<br/>
+prints "Invalid Command"<br/>
+(More than one commands)<br/>
+prints "Invalid Command"<br/>
