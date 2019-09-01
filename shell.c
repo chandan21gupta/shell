@@ -110,27 +110,29 @@ void builtin_commands(char **tokens) {
 	}
 	else if(strcmp(command,"echo") == 0) {
 		tokens++;
-		if(strcmp(*tokens,"-e") == 0) {
-			++tokens;
-			while(*tokens != NULL) {
-				printf("%s",*tokens);
-				tokens++;
+		if(*tokens != NULL) {
+			if(strcmp(*tokens,"-e") == 0) {
+				++tokens;
+				while(*tokens != NULL) {
+					printf("%s",*tokens);
+					tokens++;
+				}
+				printf("\n");
 			}
-			printf("\n");
-		}
-		else if(strcmp(*tokens,"-n") == 0) {
-			++tokens;
-			while(*tokens != NULL) {
-				printf("%s ",*tokens);
-				tokens++;
+			else if(strcmp(*tokens,"-n") == 0) {
+				++tokens;
+				while(*tokens != NULL) {
+					printf("%s ",*tokens);
+					tokens++;
+				}
 			}
-		}
-		else {
-			while(*tokens != NULL) {
-				printf("%s ",*tokens);
-				tokens++;
+			else {
+				while(*tokens != NULL) {
+					printf("%s ",*tokens);
+					tokens++;
+				}
+				printf("\n");
 			}
-			printf("\n");
 		}
 	}
 	else if(strcmp(command,"history") == 0) {
