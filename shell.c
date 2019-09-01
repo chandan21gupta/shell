@@ -11,7 +11,9 @@ int command_number = 0;
 void add_history(char *command) {
 	if(strlen(command) != 0){
 	    history[command_number] = malloc(strlen(command)*sizeof(char));
-	    history[command_number] = command;
+	    for(int i = 0;i<strlen(command);i++) {
+	    	history[command_number][i] = command[i];
+	    }
 	    command_number++;
 	}
 }
@@ -102,12 +104,13 @@ int execute_process(char **tokens) {
 void builtin_commands(char **tokens) {
 	char *command = *tokens;
 	if(strcmp(command,"cd") == 0) {
-		if(*(++tokens) != NULL) {
-			printf("warning : no need for arguments\n");
-		}
 		int status = changeDirectory(*(++tokens));
 		if(status == -1) {
 			printf("error : Cannot find the directory.\n");
+			return;
+		}
+		if(*(++tokens) != NULL) {
+			printf("warning : no need for more than one argument\n");
 		}
 		return;
 	}
@@ -126,6 +129,13 @@ void builtin_commands(char **tokens) {
 				++tokens;
 				while(*tokens != NULL) {
 					printf("%s ",*tokens);
+					tokens++;
+				}
+			}
+			else if(strcmp(*tokens,"-en") == 0 || strcmp(*tokens,"-ne") == 0) {
+				++tokens;
+				while(*tokens != NULL) {
+					printf("%s",*tokens);
 					tokens++;
 				}
 			}
@@ -150,8 +160,16 @@ void builtin_commands(char **tokens) {
 			else if(strcmp(*tokens,"-w") == 0) {
 				addHistoryFile();
 			}
+			else if(strcmp(*tokens,"-wc") || strcmp(*tokens,"-cw")) {
+				addHistoryFile();
+				clear_history();
+			}
 			else {
 				printf("invalid command\n");
+				return;
+			}
+			if(*(++tokens)!=NULL) {
+				printf("warning:no need for more than one arguments\n");
 			}
 		}
 
