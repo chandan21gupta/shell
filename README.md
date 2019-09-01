@@ -5,6 +5,7 @@ This is a custom shell I made in c for a linux based environment. Currently it h
   changes the shell's working directory to the input path (can be relative or absolute).
   Ex. cd Desktop (shift from current directory to Desktop).
   Extreme cases -> (No path provided)
+  <br/>
     Shell prints path argument missing
                 ->(Unreachable or wrong path provided)
     Shell prints wrong path provided
