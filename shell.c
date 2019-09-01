@@ -8,7 +8,17 @@
 char *history[100];
 int command_number = 0;
 
+void clear_history() {
+	for(int i = 0;i<command_number;i++) {
+		free(history[i]);
+	}
+	command_number = 0;
+}
+
 void add_history(char *command) {
+	if(command_number>=100) {
+		clear_history();
+	}
 	if(strlen(command) != 0){
 	    history[command_number] = malloc(strlen(command)*sizeof(char));
 	    for(int i = 0;i<strlen(command);i++) {
@@ -24,12 +34,6 @@ void print_history() {
     }
 }
 
-void clear_history() {
-	for(int i = 0;i<command_number;i++) {
-		free(history[i]);
-	}
-	command_number = 0;
-}
 
 void addHistoryFile() {
 	FILE *fptr;
