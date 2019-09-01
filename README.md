@@ -10,7 +10,7 @@ This is a custom shell I made in c for a linux based environment. Currently it h
     Shell prints path argument missing
     <br/>
                 ->(Unreachable or wrong path provided)<br/>
-    Shell prints wrong path provided<br/>
+    Shell prints "wrong path provided".<br/>
 ### echo [flags] [statement]
 Assumption -> Any other flag is just another statement<br/>
 prints the statement input given by the user.<br/>
@@ -43,8 +43,11 @@ prints the current working directory local to the shell.<br/>
 Ex. pwd<br/>
 Output - current working directory<br/>
 Extreme cases -> same as history command<br/>
+Output -> Raises a warning, telling the user not to provide arguments.<br/>
 
 ### exit 
 kills the custom shell.</br>
 Extreme cases -> same as history command<br/>
+Output -> Raises a warning, telling the user not to provide arguments.<br/>
+
 
