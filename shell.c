@@ -102,6 +102,9 @@ int execute_process(char **tokens) {
 void builtin_commands(char **tokens) {
 	char *command = *tokens;
 	if(strcmp(command,"cd") == 0) {
+		if(*(++tokens) != NULL) {
+			printf("warning : no need for arguments\n");
+		}
 		int status = changeDirectory(*(++tokens));
 		if(status == -1) {
 			printf("error : Cannot find the directory.\n");
@@ -148,7 +151,7 @@ void builtin_commands(char **tokens) {
 				addHistoryFile();
 			}
 			else {
-				printf("invalid command");
+				printf("invalid command\n");
 			}
 		}
 
@@ -156,9 +159,15 @@ void builtin_commands(char **tokens) {
 
 	else if(strcmp(command,"pwd") == 0) {
 		currentDirectory();
+		if(*(++tokens) != NULL) {
+			printf("warning : no need for arguments\n");
+		}
 	}
 
 	else if(strcmp(command,"exit") == 0) {
+		if(*(++tokens) != NULL) {
+			printf("warning : no need for arguments\n");
+		}
 		exit(0);
 	}
 
