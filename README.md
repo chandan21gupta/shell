@@ -36,3 +36,15 @@ Extreme cases -> (any other flag)<br/>
 prints "Invalid Command"<br/>
 (More than one commands)<br/>
 prints "Invalid Command"<br/>
+
+
+### pwd 
+prints the current working directory local to the shell.<br/>
+Ex. pwd<br/>
+Output - current working directory<br/>
+Extreme cases -> same as history command<br/>
+
+### exit 
+kills the custom shell.</br>
+Extreme cases -> same as history command<br/>
+
