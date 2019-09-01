@@ -50,4 +50,9 @@ kills the custom shell.</br>
 Extreme cases -> same as history command<br/>
 Output -> Raises a warning, telling the user not to provide arguments.<br/>
 
+## external commands
 
+### consists mainly of ls, cat, mkdir, rm and date. 
+For these commands I first created a child process using fork() in c. In the child process I executed these commands using the execvp() function from the exec() family. Then I made the parent process wait for the child process to complete its execution.
+<br/>
+Extreme cases -> Since the execvp() system call directly executes the command binary executables, same exceptions will be shown as in the parent of shell.  
